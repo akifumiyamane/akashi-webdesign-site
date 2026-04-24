@@ -1,14 +1,21 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const defaultSiteUrl = "https://akashi-webdesign.com";
+
+function getSiteUrl() {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL || defaultSiteUrl;
+  try {
+    return new URL(raw).origin;
+  } catch {
+    return defaultSiteUrl;
+  }
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const siteUrl = getSiteUrl();
   return [
     {
       url: `${siteUrl}/`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
     },
   ];
 }
